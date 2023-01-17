@@ -9,10 +9,21 @@ def nans(df):
 	for c in df.columns:
 		print(df[c].isna().sum(),'nans',c)
 
-def hists(df,bins=30,figsize=(30,3)):
+def hists(df,bins=30,figsize=(30,3),color=None,norm=False,alpha=0.9):
 	plt.figure(figsize=figsize)
-	for i in range(len(df.columns)):
-		 plt.subplot(1,len(df.columns),i+1)
-		 plt.hist(df.iloc[:,i].values,bins=bins)
-		 plt.title(df.columns[i])
+	if color is None:
+		for i in range(len(df.columns)):
+			 plt.subplot(1,len(df.columns),i+1)
+			 plt.hist(df.iloc[:,i].values,bins=bins,density=norm)
+			 plt.title(df.columns[i])
+	else:
+		options=color.unique()
+		for i in range(len(df.columns)):
+			 plt.subplot(1,len(df.columns),i+1)
+			 plt.title(df.columns[i])
+			 for opt in options:
+				 plt.hist(df[color==opt].iloc[:,i].values,bins=bins,label=opt,density=norm,alpha=alpha)
+			 plt.legend()
+
+		
 
